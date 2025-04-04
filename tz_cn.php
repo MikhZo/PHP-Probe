@@ -1,15 +1,14 @@
 <?php
 
 
-error_reporting(0); //Подавить все сообщения об ошибках
-@header("content-Type: text/html; charset=utf-8"); //Обязательный язык
+error_reporting(0); //抑制所有错误信息
+@header("content-Type: text/html; charset=utf-8"); //语言强制
 ob_start();
-//date_default_timezone_set('Asia/Shanghai');//Это предложение используется для устранения разницы во времени
-date_default_timezone_set('Europe/Moscow');
+date_default_timezone_set('Asia/Shanghai');//此句用于消除时间差
 
-$title = 'PHP зонд';
+$title = 'PHP探针';
 
-$version = "v0.4.7"; //Версия
+$version = "v0.4.7"; //版本号
 
 
 
@@ -31,7 +30,7 @@ function memory_usage()
 }
 
 
-// Тайминг
+// 计时
 
 function microtime_float() 
 {
@@ -45,7 +44,7 @@ function microtime_float()
 }
 
 
-//Единицы измерения
+//单位转换
 function formatsize($size) 
 {
 	$danwei=array(' B ',' K ',' M ',' G ',' T ');
@@ -81,7 +80,7 @@ function valid_email($str)
 }
 
 
-//Определение параметров настройки PHP
+//检测PHP设置参数
 
 function show($varName)
 {
@@ -115,13 +114,13 @@ function show($varName)
 
 
 
-//Сохранение результатов теста производительности сервера
+//保留服务器性能测试结果
 
-$valInt = isset($_POST['pInt']) ? $_POST['pInt'] : "Не проверено";
+$valInt = isset($_POST['pInt']) ? $_POST['pInt'] : "未测试";
 
-$valFloat = isset($_POST['pFloat']) ? $_POST['pFloat'] : "Не проверено";
+$valFloat = isset($_POST['pFloat']) ? $_POST['pFloat'] : "未测试";
 
-$valIo = isset($_POST['pIo']) ? $_POST['pIo'] : "Не проверено";
+$valIo = isset($_POST['pIo']) ? $_POST['pIo'] : "未测试";
 
 
 
@@ -133,26 +132,26 @@ if ($_GET['act'] == "phpinfo")
 	exit();
 
 } 
-elseif($_POST['act'] == "Целочисленный тест")
+elseif($_POST['act'] == "整型测试")
 {
 
 	$valInt = test_int();
 
 } 
-elseif($_POST['act'] == "Тест с плавающей точкой")
+elseif($_POST['act'] == "浮点测试")
 {
 
 	$valFloat = test_float();
 
 } 
-elseif($_POST['act'] == "Тест IO")
+elseif($_POST['act'] == "IO测试")
 {
 
 	$valIo = test_io();
 
 } 
-//Тест скорости - старт
-elseif($_POST['act']=="Начать тест")
+//网速测试-开始
+elseif($_POST['act']=="开始测试")
 {
 ?>
 	<script language="javascript" type="text/javascript">
@@ -174,7 +173,7 @@ elseif($_POST['act']=="Начать тест")
 	</script>
 <?php
 }
-//Тест скорости - конец
+//网速测试-结束
 elseif($_GET['act'] == "Function")
 {
 	$arr = get_defined_functions();
@@ -182,7 +181,7 @@ elseif($_GET['act'] == "Function")
 	{
 	}
 	echo "<pre>";
-	Echo "Здесь показаны все системные и пользовательские функции.\n";
+	Echo "这里显示系统所支持的所有函数,和自定义函数\n";
 	print_r($arr);
 	echo "</pre>";
 	exit();
@@ -201,7 +200,7 @@ elseif($_GET['act'] == "Function")
 	{
 	}
 	echo "<pre>";
-	Echo "Это показывает функцию, что система отключена.\n";
+	Echo "这里显示系统被禁用的函数\n";
 	print_r($arr);
 	echo "</pre>";
 	exit();
@@ -209,9 +208,9 @@ elseif($_GET['act'] == "Function")
 
 
 
-//Обнаружение MySQL
+//MySQL检测
 
-if ($_POST['act'] == 'Обнаружение MySQL')
+if ($_POST['act'] == 'MySQL检测')
 {
 
 	$host = isset($_POST['host']) ? trim($_POST['host']) : '';
@@ -231,24 +230,24 @@ if ($_POST['act'] == 'Обнаружение MySQL')
 	$password = is_string($password) ? htmlspecialchars($password) : '';
 
 }
-elseif ($_POST['act'] == 'Обнаружение функций')
+elseif ($_POST['act'] == '函数检测')
 {
 
-	$funRe = "функция".$_POST['funName']."Результаты тестирования статуса поддержки：".isfun1($_POST['funName']);
+	$funRe = "函数".$_POST['funName']."支持状况检测结果：".isfun1($_POST['funName']);
 
 } 
-elseif ($_POST['act'] == 'Обнаружение почты')
+elseif ($_POST['act'] == '邮件检测')
 {
 
-	$mailRe = "Результаты теста отправки по электронной почте: отправить";
+	$mailRe = "邮件发送检测结果：发送";
 	if($_SERVER['SERVER_PORT']==80){$mailContent = "http://".$_SERVER['SERVER_NAME'].($_SERVER['PHP_SELF'] ? $_SERVER['PHP_SELF'] : $_SERVER['SCRIPT_NAME']);}
 	else{$mailContent = "http://".$_SERVER['SERVER_NAME'].":".$_SERVER['SERVER_PORT'].($_SERVER['PHP_SELF'] ? $_SERVER['PHP_SELF'] : $_SERVER['SCRIPT_NAME']);}
-	$mailRe .= (false !== @mail($_POST["mailAdd"], $mailContent, "This is a test mail!")) ? "полный":"недостаточный";
+	$mailRe .= (false !== @mail($_POST["mailAdd"], $mailContent, "This is a test mail!")) ? "完成":"失败";
 
 }
 
 
-//Тест скорости сети
+//网络速度测试
 if(isset($_POST['speed']))
 {
 	$speed=round(100/($_POST['speed']/2048),2);
@@ -259,33 +258,33 @@ elseif($_GET['speed']=="0")
 }
 elseif(isset($_GET['speed']) and $_GET['speed']>0)
 {
-	$speed=round(100/($_GET['speed']/2048),2); //Скорость скачивания：$speed kb/s
+	$speed=round(100/($_GET['speed']/2048),2); //下载速度：$speed kb/s
 }
 else
 {
-	$speed="<font color=\"red\">&nbsp;Не обнаружено&nbsp;</font>";
+	$speed="<font color=\"red\">&nbsp;未探测&nbsp;</font>";
 }	
 	
 	
 
-// Поддержка функции обнаружения
+// 检测函数支持
 
 function isfun($funName = '')
 {
 
-    if (!$funName || trim($funName) == '' || preg_match('~[^a-z0-9\_]+~i', $funName, $tmp)) return 'ошибка';
+    if (!$funName || trim($funName) == '' || preg_match('~[^a-z0-9\_]+~i', $funName, $tmp)) return '错误';
 
 	return (false !== function_exists($funName)) ? '<font color="green"><i class="fa fa-check"></i></font>' : '<font color="red"><i class="fa fa-times"></i></font>';
 }
 function isfun1($funName = '')
 {
-    if (!$funName || trim($funName) == '' || preg_match('~[^a-z0-9\_]+~i', $funName, $tmp)) return 'ошибка';
+    if (!$funName || trim($funName) == '' || preg_match('~[^a-z0-9\_]+~i', $funName, $tmp)) return '错误';
 	return (false !== function_exists($funName)) ? '<i class="fa fa-check"></i>' : '<i class="fa fa-times"></i>';
 }
 
 
 
-//Тест целочисленных вычислений
+//整数运算能力测试
 
 function test_int()
 {
@@ -303,7 +302,7 @@ function test_int()
 
 	$time = ($timeEnd["usec"]-$timeStart["usec"])/1000000+$timeEnd["sec"]-$timeStart["sec"];
 
-	$time = round($time, 3)."второй";
+	$time = round($time, 3)."秒";
 
 	return $time;
 
@@ -311,12 +310,12 @@ function test_int()
 
 
 
-//Тестирование вычислений с плавающей точкой
+//浮点运算能力测试
 
 function test_float()
 {
 
-	//Получить значение пи
+	//得到圆周率值
 
 	$t = pi();
 
@@ -327,7 +326,7 @@ function test_float()
 	for($i = 0; $i < 3000000; $i++)
 	{
 
-		//квадратный корень
+		//开平方
 
 		sqrt($t);
 
@@ -339,7 +338,7 @@ function test_float()
 
 	$time = ($timeEnd["usec"]-$timeStart["usec"])/1000000+$timeEnd["sec"]-$timeStart["sec"];
 
-	$time = round($time, 3)."второй";
+	$time = round($time, 3)."秒";
 
 	return $time;
 
@@ -347,7 +346,7 @@ function test_float()
 
 
 
-//Тестирование ввода-вывода
+//IO能力测试
 
 function test_io()
 {
@@ -371,7 +370,7 @@ function test_io()
 
 	$time = ($timeEnd["usec"]-$timeStart["usec"])/1000000+$timeEnd["sec"]-$timeStart["sec"];
 
-	$time = round($time, 3)."второй";
+	$time = round($time, 3)."秒";
 
 	return($time);
 
@@ -382,11 +381,11 @@ function GetCpuPercentages($stat1, $stat2) {if(count($stat1)!==count($stat2)){re
 $stat1 = GetCoreInformation();sleep(1);$stat2 = GetCoreInformation();$data = GetCpuPercentages($stat1, $stat2);
 $cpu_show = $data['cpu0']['user']."%us,  ".$data['cpu0']['sys']."%sy,  ".$data['cpu0']['nice']."%ni, ".$data['cpu0']['idle']."%id,  ".$data['cpu0']['iowait']."%wa,  ".$data['cpu0']['irq']."%irq,  ".$data['cpu0']['softirq']."%softirq";
 function makeImageUrl($title, $data) {$api='http://api.yahei.net/tz/cpu_show.php?id=';$url.=$data['user'].',';$url.=$data['nice'].',';$url.=$data['sys'].',';$url.=$data['idle'].',';$url.=$data['iowait'];$url.='&chdl=User|Nice|Sys|Idle|Iowait&chdlp=b&chl=';$url.=$data['user'].'%25|';$url.=$data['nice'].'%25|';$url.=$data['sys'].'%25|';$url.=$data['idle'].'%25|';$url.=$data['iowait'].'%25';$url.='&chtt=Core+'.$title;return $api.base64_encode($url);}
-if($_GET['act'] == "cpu_percentage"){echo "<center><b><font face='Microsoft YaHei' color='#666666' size='3'>Изображение загружается медленно, подождите!</font></b><br /><br />";foreach( $data as $k => $v ) {echo '<img src="' . makeImageUrl( $k, $v ) . '" style="width:360px;height:240px;border: #CCCCCC 1px solid;background: #FFFFFF;margin:5px;padding:5px;" />';}echo "</center>";exit();}
+if($_GET['act'] == "cpu_percentage"){echo "<center><b><font face='Microsoft YaHei' color='#666666' size='3'>图片加载慢，请耐心等待！</font></b><br /><br />";foreach( $data as $k => $v ) {echo '<img src="' . makeImageUrl( $k, $v ) . '" style="width:360px;height:240px;border: #CCCCCC 1px solid;background: #FFFFFF;margin:5px;padding:5px;" />';}echo "</center>";exit();}
 
 
 
-// Получение информации о процессоре
+// 根据不同系统取得CPU相关信息
 
 switch(PHP_OS)
 {
@@ -420,7 +419,7 @@ switch(PHP_OS)
 
 
 
-//Обнаружение системы Linux
+//linux系统探测
 
 function sys_linux()
 
@@ -464,8 +463,8 @@ function sys_linux()
 			$x1 = '';
 		else
 			$x1 = ' x'.$res['cpu']['num'];
-		$mhz[1][0] = ' | частота:'.$mhz[1][0];
-		$cache[1][0] = ' | L2 кеш:'.$cache[1][0];
+		$mhz[1][0] = ' | 频率:'.$mhz[1][0];
+		$cache[1][0] = ' | 二级缓存:'.$cache[1][0];
 		$bogomips[1][0] = ' | Bogomips:'.$bogomips[1][0];
 		$res['cpu']['model'][] = $model[1][0].$mhz[1][0].$cache[1][0].$bogomips[1][0].$x1;
 
@@ -501,11 +500,11 @@ function sys_linux()
 
     $min = floor($min - ($days * 60 * 24) - ($hours * 60));
 
-    if ($days !== 0) $res['uptime'] = $days."дни";
+    if ($days !== 0) $res['uptime'] = $days."天";
 
-    if ($hours !== 0) $res['uptime'] .= $hours."часы";
+    if ($hours !== 0) $res['uptime'] .= $hours."小时";
 
-    $res['uptime'] .= $min."минуты";
+    $res['uptime'] .= $min."分钟";
 
 
     // MEMORY
@@ -530,11 +529,11 @@ function sys_linux()
     $res['memPercent'] = (floatval($res['memTotal'])!=0)?round($res['memUsed']/$res['memTotal']*100,2):0;
 
 
-    $res['memRealUsed'] = $res['memTotal'] - $res['memFree'] - $res['memCached'] - $res['memBuffers']; //Реальное использование памяти
-	$res['memRealFree'] = $res['memTotal'] - $res['memRealUsed']; //Реально простаивает
-    $res['memRealPercent'] = (floatval($res['memTotal'])!=0)?round($res['memRealUsed']/$res['memTotal']*100,2):0; //Реальное использование памяти率
+    $res['memRealUsed'] = $res['memTotal'] - $res['memFree'] - $res['memCached'] - $res['memBuffers']; //真实内存使用
+	$res['memRealFree'] = $res['memTotal'] - $res['memRealUsed']; //真实空闲
+    $res['memRealPercent'] = (floatval($res['memTotal'])!=0)?round($res['memRealUsed']/$res['memTotal']*100,2):0; //真实内存使用率
 
-	$res['memCachedPercent'] = (floatval($res['memCached'])!=0)?round($res['memCached']/$res['memTotal']*100,2):0; //Использование кеша
+	$res['memCachedPercent'] = (floatval($res['memCached'])!=0)?round($res['memCached']/$res['memTotal']*100,2):0; //Cached内存使用率
 
     $res['swapTotal'] = round($buf[4][0]/1024, 2);
 
@@ -562,7 +561,7 @@ function sys_linux()
 
 
 
-//Обнаружение FreeBSD
+//FreeBSD系统探测
 
 function sys_freebsd()
 {
@@ -595,11 +594,11 @@ function sys_freebsd()
 
 	$min = floor($min - ($days * 60 * 24) - ($hours * 60));
 
-	if ($days !== 0) $res['uptime'] = $days."дней";
+	if ($days !== 0) $res['uptime'] = $days."天";
 
-	if ($hours !== 0) $res['uptime'] .= $hours."часов";
+	if ($hours !== 0) $res['uptime'] .= $hours."小时";
 
-	$res['uptime'] .= $min."минут";
+	$res['uptime'] .= $min."分钟";
 
 	//MEMORY
 
@@ -635,7 +634,7 @@ function sys_freebsd()
 
 
 
-//Получение параметров FreeBSD
+//取得参数值 FreeBSD
 
 function get_key($keyName)
 {
@@ -646,7 +645,7 @@ function get_key($keyName)
 
 
 
-//Определение местоположения исполнительных файлов FreeBSD
+//确定执行文件位置 FreeBSD
 
 function find_command($commandName)
 {
@@ -666,7 +665,7 @@ function find_command($commandName)
 
 
 
-//Система исполнения команд FreeBSD
+//执行系统命令 FreeBSD
 
 function do_command($commandName, $args)
 {
@@ -695,7 +694,7 @@ function do_command($commandName, $args)
 
 
 
-//Обнаружение Windows
+//windows系统探测
 
 function sys_windows()
 {
@@ -754,7 +753,7 @@ function sys_windows()
 
 	$sysinfo[0]['CSDVersion']=iconv('GBK', 'UTF-8',$sysinfo[0]['CSDVersion']);
 
-	$res['win_n'] = $sysinfo[0]['Caption']." ".$sysinfo[0]['CSDVersion']." Серийный номер:{$sysinfo[0]['SerialNumber']} к".date('Y год m месяц d день H:i:s',strtotime(substr($sysinfo[0]['InstallDate'],0,14)))."установлено";
+	$res['win_n'] = $sysinfo[0]['Caption']." ".$sysinfo[0]['CSDVersion']." 序列号:{$sysinfo[0]['SerialNumber']} 于".date('Y年m月d日H:i:s',strtotime(substr($sysinfo[0]['InstallDate'],0,14)))."安装";
 
 	//UPTIME
 
@@ -773,11 +772,11 @@ function sys_windows()
 
 	$min = floor($min - ($days * 60 * 24) - ($hours * 60));
 
-	if ($days !== 0) $res['uptime'] = $days."дней";
+	if ($days !== 0) $res['uptime'] = $days."天";
 
-	if ($hours !== 0) $res['uptime'] .= $hours."часов";
+	if ($hours !== 0) $res['uptime'] .= $hours."小时";
 
-	$res['uptime'] .= $min."минут";
+	$res['uptime'] .= $min."分钟";
 
 
 	//MEMORY
@@ -786,7 +785,7 @@ function sys_windows()
 
 	$res['memFree'] = round($sysinfo[0]['FreePhysicalMemory']/1024,2);
 
-	$res['memUsed'] = $res['memTotal']-$res['memFree'];	//Выше две строки были разделены на 1024, эту строку не нужно делить
+	$res['memUsed'] = $res['memTotal']-$res['memFree'];	//上面两行已经除以1024,这行不用再除了
 
 	$res['memPercent'] = round($res['memUsed'] / $res['memTotal']*100,2);
 
@@ -861,7 +860,7 @@ function GetWMI($wmi,$strClass, $strValue = array())
 
 
 
-//Шкала бар
+//比例条
 
 function bar($percent)
 {
@@ -876,38 +875,38 @@ function bar($percent)
 
 
 
-$uptime = $sysInfo['uptime']; //Онлайн время
+$uptime = $sysInfo['uptime']; //在线时间
 
-$stime = date('Y-m-d H:i:s'); //Текущее время системы
+$stime = date('Y-m-d H:i:s'); //系统当前时间
 
-//Жесткий диск
+//硬盘
 
-$dt = round(@disk_total_space(".")/(1024*1024*1024),3); //в целом
-$df = round(@disk_free_space(".")/(1024*1024*1024),3); //имеющийся
-$du = $dt-$df; //Используется
+$dt = round(@disk_total_space(".")/(1024*1024*1024),3); //总
+$df = round(@disk_free_space(".")/(1024*1024*1024),3); //可用
+$du = $dt-$df; //已用
 $hdPercent = (floatval($dt)!=0)?round($du/$dt*100,2):0;
 
-$load = $sysInfo['loadAvg'];	//Загрузка системы
+$load = $sysInfo['loadAvg'];	//系统负载
 
 
-//Если память меньше 1G, отображается M, в противном случае отображается G.
+//判断内存如果小于1G，就显示M，否则显示G单位
 if($sysInfo['memTotal']<1024)
 {
 	$memTotal = $sysInfo['memTotal']." M";
 	$mt = $sysInfo['memTotal']." M";
 	$mu = $sysInfo['memUsed']." M";
 	$mf = $sysInfo['memFree']." M";
-	$mc = $sysInfo['memCached']." M";	//Кеш-память
-	$mb = $sysInfo['memBuffers']." M";	//буфер
+	$mc = $sysInfo['memCached']." M";	//cache化内存
+	$mb = $sysInfo['memBuffers']." M";	//缓冲
 	$st = $sysInfo['swapTotal']." M";
 	$su = $sysInfo['swapUsed']." M";
 	$sf = $sysInfo['swapFree']." M";
 	$swapPercent = $sysInfo['swapPercent'];
-	$memRealUsed = $sysInfo['memRealUsed']." M"; //Реальное использование памяти
-	$memRealFree = $sysInfo['memRealFree']." M"; //Реальная память простаивает
-	$memRealPercent = $sysInfo['memRealPercent']; //Реальное использование памяти соотношение
-	$memPercent = $sysInfo['memPercent']; //Общее использование памяти
-	$memCachedPercent = $sysInfo['memCachedPercent']; //Использование кеш-памяти
+	$memRealUsed = $sysInfo['memRealUsed']." M"; //真实内存使用
+	$memRealFree = $sysInfo['memRealFree']." M"; //真实内存空闲
+	$memRealPercent = $sysInfo['memRealPercent']; //真实内存使用比率
+	$memPercent = $sysInfo['memPercent']; //内存总使用率
+	$memCachedPercent = $sysInfo['memCachedPercent']; //cache内存使用率
 }
 else
 {
@@ -921,15 +920,15 @@ else
 	$su = round($sysInfo['swapUsed']/1024,3)." G";
 	$sf = round($sysInfo['swapFree']/1024,3)." G";
 	$swapPercent = $sysInfo['swapPercent'];
-	$memRealUsed = round($sysInfo['memRealUsed']/1024,3)." G"; //Реальное использование памяти
-	$memRealFree = round($sysInfo['memRealFree']/1024,3)." G"; //Реальная память простаивает
-	$memRealPercent = $sysInfo['memRealPercent']; //Реальное использование памяти соотношение
-	$memPercent = $sysInfo['memPercent']; //Общее использование памяти
-	$memCachedPercent = $sysInfo['memCachedPercent']; //Использование кеш-памяти
+	$memRealUsed = round($sysInfo['memRealUsed']/1024,3)." G"; //真实内存使用
+	$memRealFree = round($sysInfo['memRealFree']/1024,3)." G"; //真实内存空闲
+	$memRealPercent = $sysInfo['memRealPercent']; //真实内存使用比率
+	$memPercent = $sysInfo['memPercent']; //内存总使用率
+	$memCachedPercent = $sysInfo['memCachedPercent']; //cache内存使用率
 }
 
 
-//NIC трафик
+//网卡流量
 
 $strs = @file("/proc/net/dev"); 
 
@@ -945,7 +944,7 @@ for ($i = 2; $i < count($strs); $i++ )
 }
 
 
-//Ajax вызывает обновление в реальном времени
+//ajax调用实时刷新
 
 if ($_GET['act'] == "rt")
 
@@ -1162,29 +1161,29 @@ function displayData(dataJSON)
 	<!--
 	<table>
 		<tr>
-			<th class="w_logo">PHP зонд</th>
-			<th class="w_top"><a href="#w_php">Параметры PHP</a></th>
-			<th class="w_top"><a href="#w_module">Компонентная поддержка</a></th>
-			<th class="w_top"><a href="#w_module_other">Сторонние компоненты</a></th>
-			<th class="w_top"><a href="#w_db">Поддержка БД</a></th>
-			<th class="w_top"><a href="#w_performance">Тест производительности</a></th>
-			<th class="w_top"><a href="#w_networkspeed">Тест скорости</a></th>
-			<th class="w_top"><a href="#w_MySQL">Обнаружение MySQL</a></th>
-			<th class="w_top"><a href="#w_function">Обнаружение функций</a></th>
-			<th class="w_top"><a href="#w_mail">Обнаружение почты</a></th>
+			<th class="w_logo">雅黑PHP探针</th>
+			<th class="w_top"><a href="#w_php">PHP参数</a></th>
+			<th class="w_top"><a href="#w_module">组件支持</a></th>
+			<th class="w_top"><a href="#w_module_other">第三方组件</a></th>
+			<th class="w_top"><a href="#w_db">数据库支持</a></th>
+			<th class="w_top"><a href="#w_performance">性能检测</a></th>
+			<th class="w_top"><a href="#w_networkspeed">网速检测</a></th>
+			<th class="w_top"><a href="#w_MySQL">MySQL检测</a></th>
+			<th class="w_top"><a href="#w_function">函数检测</a></th>
+			<th class="w_top"><a href="#w_mail">邮件检测</a></th>
 		</tr>
 	</table>
 	-->
 	<div style="display: inline-block">
-		<div class="w_logo"><span>PHP зонд</span></div>
+		<div class="w_logo"><span>PHP探针</span></div>
 	</div>
 	<div style="display: inline-block">
-		<a class="w_top" onclick="$('body,html').animate({ scrollTop: 0 }, 200);"><i class="fa fa-tasks"></i> Информация о сервере</a>
-		<a class="w_top" onclick="$('body,html').animate({ scrollTop: $('#w_php').offset().top }, 200);"><i class="fa fa-tags"></i> Параметры PHP</a>
-		<a class="w_top" onclick="$('body,html').animate({ scrollTop: $('#w_module').offset().top }, 200);"><i class="fa fa-cogs"></i> Компонентная поддержка</a>
-		<a class="w_top" onclick="$('body,html').animate({ scrollTop: $('#w_module_other').offset().top }, 200);"><i class="fa fa-cubes"></i> Сторонние компоненты</a>
-		<a class="w_top" onclick="$('body,html').animate({ scrollTop: $('#w_db').offset().top }, 200);"><i class="fa fa-database"></i> Поддержка БД</a>
-		<a class="w_top" onclick="$('body,html').animate({ scrollTop: $('#w_performance').offset().top }, 200);"><i class="fa fa-tachometer"></i> Тест производительности</a>
+		<a class="w_top" onclick="$('body,html').animate({ scrollTop: 0 }, 200);"><i class="fa fa-tasks"></i> 服务器信息</a>
+		<a class="w_top" onclick="$('body,html').animate({ scrollTop: $('#w_php').offset().top }, 200);"><i class="fa fa-tags"></i> PHP参数</a>
+		<a class="w_top" onclick="$('body,html').animate({ scrollTop: $('#w_module').offset().top }, 200);"><i class="fa fa-cogs"></i> 组件支持</a>
+		<a class="w_top" onclick="$('body,html').animate({ scrollTop: $('#w_module_other').offset().top }, 200);"><i class="fa fa-cubes"></i> 第三方组件</a>
+		<a class="w_top" onclick="$('body,html').animate({ scrollTop: $('#w_db').offset().top }, 200);"><i class="fa fa-database"></i> 数据库支持</a>
+		<a class="w_top" onclick="$('body,html').animate({ scrollTop: $('#w_performance').offset().top }, 200);"><i class="fa fa-tachometer"></i> 性能检测</a>
 	</div>
 
 
@@ -1196,23 +1195,23 @@ function displayData(dataJSON)
 
 
 
-<!--Параметры, связанные с сервером-->
+<!--服务器相关参数-->
 
 <table>
 
-  <tr><th colspan="4"><i class="fa fa-tasks"></i> Параметры сервера</th></tr>
+  <tr><th colspan="4"><i class="fa fa-tasks"></i> 服务器参数</th></tr>
 
   <tr>
 
-    <td>Доменное имя сервера / IP-адрес</td>
+    <td>服务器域名/IP地址</td>
 
-	<td colspan="3"><?php echo @get_current_user();?> - <?php echo $_SERVER['SERVER_NAME'];?>(<?php if('/'==DIRECTORY_SEPARATOR){echo $_SERVER['SERVER_ADDR'];}else{echo @gethostbyname($_SERVER['SERVER_NAME']);} ?>)&nbsp;&nbsp;Ваш IP-адрес<?php echo empty($_SERVER["HTTP_X_FORWARDED_FOR"]) ? @$_SERVER["REMOTE_ADDR"] : @$_SERVER["HTTP_X_FORWARDED_FOR"];?></td>
+    <td colspan="3"><?php echo @get_current_user();?> - <?php echo $_SERVER['SERVER_NAME'];?>(<?php if('/'==DIRECTORY_SEPARATOR){echo $_SERVER['SERVER_ADDR'];}else{echo @gethostbyname($_SERVER['SERVER_NAME']);} ?>)&nbsp;&nbsp;你的IP地址是：<?php echo empty($_SERVER["HTTP_X_FORWARDED_FOR"]) ? @$_SERVER["REMOTE_ADDR"] : @$_SERVER["HTTP_X_FORWARDED_FOR"];?></td>
 
   </tr>
 
   <tr>
 
-    <td>ID сервера</td>
+    <td>服务器标识</td>
 
     <td colspan="3"><?php if($sysInfo['win_n'] != ''){echo $sysInfo['win_n'];}else{echo @php_uname();};?></td>
 
@@ -1220,11 +1219,11 @@ function displayData(dataJSON)
 
   <tr>
 
-    <td width="13%">Серверная ОС</td>
+    <td width="13%">服务器操作系统</td>
 
-    <td width="37%"><?php $os = explode(" ", php_uname()); echo $os[0];?> &nbsp;Версия ядра:<?php if('/'==DIRECTORY_SEPARATOR){echo $os[2];}else{echo $os[1];} ?></td>
+    <td width="37%"><?php $os = explode(" ", php_uname()); echo $os[0];?> &nbsp;内核版本：<?php if('/'==DIRECTORY_SEPARATOR){echo $os[2];}else{echo $os[1];} ?></td>
 
-    <td width="13%">Механизм интерпретации сервера</td>
+    <td width="13%">服务器解译引擎</td>
 
     <td width="37%"><?php echo $_SERVER['SERVER_SOFTWARE'];?></td>
 
@@ -1232,11 +1231,11 @@ function displayData(dataJSON)
 
   <tr>
 
-    <td>Язык сервера</td>
+    <td>服务器语言</td>
 
     <td><?php echo getenv("HTTP_ACCEPT_LANGUAGE");?></td>
 
-    <td>Порт сервера</td>
+    <td>服务器端口</td>
 
     <td><?php echo $_SERVER['SERVER_PORT'];?></td>
 
@@ -1244,11 +1243,11 @@ function displayData(dataJSON)
 
   <tr>
 
-	  <td>Имя хоста сервера</td>
+	  <td>服务器主机名</td>
 
 	  <td><?php if('/'==DIRECTORY_SEPARATOR ){echo $os[1];}else{echo $os[2];} ?></td>
 
-	  <td>Абсолютный путь</td>
+	  <td>绝对路径</td>
 
 	  <td><?php echo $_SERVER['DOCUMENT_ROOT']?str_replace('\\','/',$_SERVER['DOCUMENT_ROOT']):str_replace('\\','/',dirname(__FILE__));?></td>
 
@@ -1256,11 +1255,11 @@ function displayData(dataJSON)
 
   <tr>
 
-	  <td>Почтовый ящик администратора</td>
+	  <td>管理员邮箱</td>
 
 	  <td><?php echo $_SERVER['SERVER_ADMIN'];?></td>
 
-		<td>Зонд путь</td>
+		<td>探针路径</td>
 
 		<td><?php echo str_replace('\\','/',__FILE__)?str_replace('\\','/',__FILE__):$_SERVER['SCRIPT_FILENAME'];?></td>
 
@@ -1274,44 +1273,44 @@ function displayData(dataJSON)
 
 <table>
 
-  <tr><th colspan="6"><i class="fa fa-area-chart"></i> Данные сервера в реальном времени</th></tr>
+  <tr><th colspan="6"><i class="fa fa-area-chart"></i> 服务器实时数据</th></tr>
 
   <tr>
 
-    <td width="13%" >Текущее время сервера</td>
+    <td width="13%" >服务器当前时间</td>
 
     <td width="37%" ><span id="stime"><?php echo $stime;?></span></td>
 
-    <td width="13%" >Сервер во время выполнения</td>
+    <td width="13%" >服务器已运行时间</td>
 
     <td width="37%" colspan="3"><span id="uptime"><?php echo $uptime;?></span></td>
 
   </tr>
   <tr>
 
-    <td width="13%">Модель CPU [<?php echo $sysInfo['cpu']['num'];?>ядер]</td>
+    <td width="13%">CPU型号 [<?php echo $sysInfo['cpu']['num'];?>核]</td>
 
     <td width="87%" colspan="5"><?php echo $sysInfo['cpu']['model'];?></td>
 
   </tr>
   <tr>
-    <td>Использование CPU</td>
-    <td colspan="5"><?php if('/'==DIRECTORY_SEPARATOR){echo $cpu_show." | <a href='".$phpSelf."?act=cpu_percentage' target='_blank' class='static'>Посмотреть график <i class=\"fa fa-external-link\"></i> </a>";}else{echo "Временно поддерживает только Linux";}?>
+    <td>CPU使用状况</td>
+    <td colspan="5"><?php if('/'==DIRECTORY_SEPARATOR){echo $cpu_show." | <a href='".$phpSelf."?act=cpu_percentage' target='_blank' class='static'>查看图表 <i class=\"fa fa-external-link\"></i> </a>";}else{echo "暂时只支持Linux系统";}?>
 	</td>
   </tr>
   <tr>
-    <td>Жесткий диск Статус использования</td>
+    <td>硬盘使用状况</td>
     <td colspan="5">
-		Общая емкость <?php echo $dt;?>&nbsp;G，
-		Используется <font color='#333333'><span id="useSpace"><?php echo $du;?></span></font>&nbsp;G，
-		Свободно <font color='#333333'><span id="freeSpace"><?php echo $df;?></span></font>&nbsp;G，
-		Уровень использования <span id="hdPercent"><?php echo $hdPercent;?></span>%
+		总空间 <?php echo $dt;?>&nbsp;G，
+		已用 <font color='#333333'><span id="useSpace"><?php echo $du;?></span></font>&nbsp;G，
+		空闲 <font color='#333333'><span id="freeSpace"><?php echo $df;?></span></font>&nbsp;G，
+		使用率 <span id="hdPercent"><?php echo $hdPercent;?></span>%
 		<div class="bar"><div id="barhdPercent" class="barli_orange" style="width:<?php echo $hdPercent;?>%" >&nbsp;</div> </div>
 	</td>
   </tr>
   <tr>
 
-		<td>Память Статус использования</td>
+		<td>内存使用状况</td>
 
 		<td colspan="5">
 
@@ -1335,55 +1334,55 @@ foreach ($tmp AS $v) {
 
 ?>
 
-          Физическая Память： в целом 
+          物理内存：共
 
           <font color='#CC0000'><?php echo $memTotal;?> </font>
 
-           , Используется
+           , 已用
 
           <font color='#CC0000'><span id="UsedMemory"><?php echo $mu;?></span></font>
 
-          , Свободно
+          , 空闲
 
           <font color='#CC0000'><span id="FreeMemory"><?php echo $mf;?></span></font>
 
-          , Уровень использования
+          , 使用率
 
 		  <span id="memPercent"><?php echo $memPercent;?></span>
 
           <div class="bar"><div id="barmemPercent" class="barli_green" style="width:<?php echo $memPercent?>%" >&nbsp;</div> </div>
 <?php
-//Определить, если кеш равен 0, не отображать
+//判断如果cache为0，不显示
 if($sysInfo['memCached']>0)
 {
 ?>		
-		  Кеш-память <span id="CachedMemory"><?php echo $mc;?></span>
-		  , Уровень использования 
+		  Cache化内存为 <span id="CachedMemory"><?php echo $mc;?></span>
+		  , 使用率 
           <span id="memCachedPercent"><?php echo $memCachedPercent;?></span>
-		  %	|Буферы  <span id="Buffers"><?php echo $mb;?></span>
+		  %	| Buffers缓冲为  <span id="Buffers"><?php echo $mb;?></span>
           <div class="bar"><div id="barmemCachedPercent" class="barli_blue" style="width:<?php echo $memCachedPercent?>%" >&nbsp;</div></div>
 
-          Реальное использование памяти
+          真实内存使用
           <span id="memRealUsed"><?php echo $memRealUsed;?></span>
-		  , Реальная память простаивает
+		  , 真实内存空闲
           <span id="memRealFree"><?php echo $memRealFree;?></span>
-		  , Уровень использования
+		  , 使用率
           <span id="memRealPercent"><?php echo $memRealPercent;?></span>
           %
           <div class="bar"><div id="barmemRealPercent" class="barli_blue2" style="width:<?php echo $memRealPercent?>%" >&nbsp;</div></div> 
 <?php
 }
-//Определите, если область SWAP равна 0, не отображается
+//判断如果SWAP区为0，不显示
 if($sysInfo['swapTotal']>0)
 {
 ?>	
-          Объем SWAP： всего 
+          SWAP区：共
           <?php echo $st;?>
-          , Используется
+          , 已使用
           <span id="swapUsed"><?php echo $su;?></span>
-          , Свободно
+          , 空闲
           <span id="swapFree"><?php echo $sf;?></span>
-          , Уровень использования
+          , 使用率
           <span id="swapPercent"><?php echo $swapPercent;?></span>
           %
           <div class="bar"><div id="barswapPercent" class="barli_red" style="width:<?php echo $swapPercent?>%" >&nbsp;</div> </div>
@@ -1396,7 +1395,7 @@ if($sysInfo['swapTotal']>0)
 
 	</tr>
 	  <tr>
-		<td>Средняя загрузка системы</td>
+		<td>系统平均负载</td>
 		<td colspan="5" class="w_number"><span id="loadAvg"><?php echo $load;?></span></td>
 	</tr>
 
@@ -1410,7 +1409,7 @@ if($sysInfo['swapTotal']>0)
 
 <table>
 
-    <tr><th colspan="5"><i class="fa fa-bar-chart"></i> Сеть Статус использования</th></tr>
+    <tr><th colspan="5"><i class="fa fa-bar-chart"></i> 网络使用状况</th></tr>
 
 <?php for ($i = 2; $i < count($strs); $i++ ) : ?>
 
@@ -1419,10 +1418,10 @@ if($sysInfo['swapTotal']>0)
      <tr>
 
         <td width="13%"><?php echo $info[1][0]?> : </td>
-        <td width="29%">Доступ к сети: <font color='#CC0000'><span id="NetInput<?php echo $i?>"><?php echo $NetInput[$i]?></span></font></td>
-		<td width="14%">В реальном времени: <font color='#CC0000'><span id="NetInputSpeed<?php echo $i?>">0B/s</span></font></td>
-        <td width="29%">Из сети: <font color='#CC0000'><span id="NetOut<?php echo $i?>"><?php echo $NetOut[$i]?></span></font></td>
-		<td width="14%">В реальном времени: <font color='#CC0000'><span id="NetOutSpeed<?php echo $i?>">0B/s</span></font></td>
+        <td width="29%">入网: <font color='#CC0000'><span id="NetInput<?php echo $i?>"><?php echo $NetInput[$i]?></span></font></td>
+		<td width="14%">实时: <font color='#CC0000'><span id="NetInputSpeed<?php echo $i?>">0B/s</span></font></td>
+        <td width="29%">出网: <font color='#CC0000'><span id="NetOut<?php echo $i?>"><?php echo $NetOut[$i]?></span></font></td>
+		<td width="14%">实时: <font color='#CC0000'><span id="NetOutSpeed<?php echo $i?>">0B/s</span></font></td>
 
     </tr>
 
@@ -1438,7 +1437,7 @@ if($sysInfo['swapTotal']>0)
 
   <tr>
 
-    <th colspan="4"><i class="fa fa-download "></i> PHP скомпилированный модуль</th>
+    <th colspan="4"><i class="fa fa-download "></i> PHP已编译模块</th>
 
   </tr>
 
@@ -1474,11 +1473,11 @@ foreach ($able as $key=>$value) {
 
 <table>
 
-  <tr><th colspan="4"><i class="fa fa-tags"></i> PHP связанные параметры</th></tr>
+  <tr><th colspan="4"><i class="fa fa-tags"></i> PHP相关参数</th></tr>
 
   <tr>
 
-    <td width="32%">Информация о PHP （phpinfo）：</td>
+    <td width="32%">PHP信息（phpinfo）：</td>
 
     <td width="18%">
 
@@ -1494,7 +1493,7 @@ foreach ($able as $key=>$value) {
 
     </td>
 
-    <td width="32%">Версия PHP （php_version）：</td>
+    <td width="32%">PHP版本（php_version）：</td>
 
     <td width="18%"><?php echo PHP_VERSION;?></td>
 
@@ -1502,11 +1501,11 @@ foreach ($able as $key=>$value) {
 
   <tr>
 
-    <td>Режим работы PHP：</td>
+    <td>PHP运行方式：</td>
 
     <td><?php echo strtoupper(php_sapi_name());?></td>
 
-    <td>Максимально занимаемая сценарием память （memory_limit）：</td>
+    <td>脚本占用最大内存（memory_limit）：</td>
 
     <td><?php echo show("memory_limit");?></td>
 
@@ -1514,11 +1513,11 @@ foreach ($able as $key=>$value) {
 
   <tr>
 
-    <td>Режим безопасности PHP （safe_mode）：</td>
+    <td>PHP安全模式（safe_mode）：</td>
 
     <td><?php echo show("safe_mode");?></td>
 
-    <td>Метод POST - максимальный лимит отправки （post_max_size）：</td>
+    <td>POST方法提交最大限制（post_max_size）：</td>
 
     <td><?php echo show("post_max_size");?></td>
 
@@ -1526,11 +1525,11 @@ foreach ($able as $key=>$value) {
 
   <tr>
 
-    <td>Максимальный предел загрузки файла （upload_max_filesize）：</td>
+    <td>上传文件最大限制（upload_max_filesize）：</td>
 
     <td><?php echo show("upload_max_filesize");?></td>
 
-    <td>Количество знаков в числах с плавающей запятой （precision）：</td>
+    <td>浮点型数据显示的有效位数（precision）：</td>
 
     <td><?php echo show("precision");?></td>
 
@@ -1538,23 +1537,23 @@ foreach ($able as $key=>$value) {
 
   <tr>
 
-    <td>Тайм-аут сценария （max_execution_time）：</td>
+    <td>脚本超时时间（max_execution_time）：</td>
 
-    <td><?php echo show("max_execution_time");?>второй</td>
+    <td><?php echo show("max_execution_time");?>秒</td>
 
-    <td>Тайм-аут socket （default_socket_timeout）：</td>
+    <td>socket超时时间（default_socket_timeout）：</td>
 
-    <td><?php echo show("default_socket_timeout");?>второй</td>
+    <td><?php echo show("default_socket_timeout");?>秒</td>
 
   </tr>
 
   <tr>
 
-    <td>Корневой каталог PHP-страницы （doc_root）：</td>
+    <td>PHP页面根目录（doc_root）：</td>
 
     <td><?php echo show("doc_root");?></td>
 
-    <td>Корневой каталог пользователя （user_dir）：</td>
+    <td>用户根目录（user_dir）：</td>
 
     <td><?php echo show("user_dir");?></td>
 
@@ -1562,11 +1561,11 @@ foreach ($able as $key=>$value) {
 
   <tr>
 
-    <td>dl() функция （enable_dl）：</td>
+    <td>dl()函数（enable_dl）：</td>
 
     <td><?php echo show("enable_dl");?></td>
 
-    <td>Каталог включаемых файлов （include_path）：</td>
+    <td>指定包含文件目录（include_path）：</td>
 
     <td><?php echo show("include_path");?></td>
 
@@ -1574,11 +1573,11 @@ foreach ($able as $key=>$value) {
 
   <tr>
 
-    <td>Информация об отображении ошибок (display_errors）：</td>
+    <td>显示错误信息（display_errors）：</td>
 
     <td><?php echo show("display_errors");?></td>
 
-    <td>Пользовательские глобальные переменные （register_globals）：</td>
+    <td>自定义全局变量（register_globals）：</td>
 
     <td><?php echo show("register_globals");?></td>
 
@@ -1586,11 +1585,11 @@ foreach ($able as $key=>$value) {
 
   <tr>
 
-    <td>Обратная косая черта данных （magic_quotes_gpc）：</td>
+    <td>数据反斜杠转义（magic_quotes_gpc）：</td>
 
     <td><?php echo show("magic_quotes_gpc");?></td>
 
-    <td>"&lt;?...?&gt;" Короткий открытый тег （short_open_tag）：</td>
+    <td>"&lt;?...?&gt;"短标签（short_open_tag）：</td>
 
     <td><?php echo show("short_open_tag");?></td>
 
@@ -1598,11 +1597,11 @@ foreach ($able as $key=>$value) {
 
   <tr>
 
-    <td>"&lt;% %&gt;" Тег стиля ASP （asp_tags）：</td>
+    <td>"&lt;% %&gt;"ASP风格标记（asp_tags）：</td>
 
     <td><?php echo show("asp_tags");?></td>
 
-    <td>Информация об игнорировании повторяющихся ошибок （ignore_repeated_errors）：</td>
+    <td>忽略重复错误信息（ignore_repeated_errors）：</td>
 
     <td><?php echo show("ignore_repeated_errors");?></td>
 
@@ -1610,11 +1609,11 @@ foreach ($able as $key=>$value) {
 
   <tr>
 
-    <td>Информация об игнорировании повторяющихся источниках （ignore_repeated_source）：</td>
+    <td>忽略重复的错误源（ignore_repeated_source）：</td>
 
     <td><?php echo show("ignore_repeated_source");?></td>
 
-    <td>Утечки памяти （report_memleaks）：</td>
+    <td>报告内存泄漏（report_memleaks）：</td>
 
     <td><?php echo show("report_memleaks");?></td>
 
@@ -1622,11 +1621,11 @@ foreach ($able as $key=>$value) {
 
   <tr>
 
-    <td>Автоматическое экранирование строки （magic_quotes_gpc）：</td>
+    <td>自动字符串转义（magic_quotes_gpc）：</td>
 
     <td><?php echo show("magic_quotes_gpc");?></td>
 
-    <td>Внешнее экранирование строки （magic_quotes_runtime）：</td>
+    <td>外部字符串自动转义（magic_quotes_runtime）：</td>
 
     <td><?php echo show("magic_quotes_runtime");?></td>
 
@@ -1634,51 +1633,51 @@ foreach ($able as $key=>$value) {
 
   <tr>
 
-    <td>Открытие удаленного файла（allow_url_fopen）：</td>
+    <td>打开远程文件（allow_url_fopen）：</td>
 
     <td><?php echo show("allow_url_fopen");?></td>
 
-    <td>Объявление переменных argv и argc （register_argc_argv）：</td>
+    <td>声明argv和argc变量（register_argc_argv）：</td>
 
     <td><?php echo show("register_argc_argv");?></td>
 
   </tr>
   <tr>
-    <td>Cookie поддержка：</td>
+    <td>Cookie 支持：</td>
     <td><?php echo isset($_COOKIE)?'<font color="green"><i class="fa fa-check"></i></font>' : '<font color="red"><i class="fa fa-times"></i></font>';?></td>
-    <td>Проверка орфографии （ASpell Library）：</td>
+    <td>拼写检查（ASpell Library）：</td>
     <td><?php echo isfun("aspell_check_raw");?></td>
   </tr>
    <tr>
-    <td>Высокоточные математические операции （BCMath）：</td>
+    <td>高精度数学运算（BCMath）：</td>
     <td><?php echo isfun("bcadd");?></td>
-    <td>PREL-совместимый синтаксис（PCRE）：</td>
+    <td>PREL相容语法（PCRE）：</td>
     <td><?php echo isfun("preg_match");?></td>
    <tr>
-    <td>Поддержка PDF-документов：</td>
+    <td>PDF文档支持：</td>
     <td><?php echo isfun("pdf_close");?></td>
-    <td>SNMP Сетевое Соглашение об управлении：</td>
+    <td>SNMP网络管理协议：</td>
     <td><?php echo isfun("snmpget");?></td>
   </tr> 
    <tr>
-    <td>Обработка почты VMailMgr：</td>
+    <td>VMailMgr邮件处理：</td>
     <td><?php echo isfun("vm_adduser");?></td>
-    <td>Поддержка Curl：</td>
+    <td>Curl支持：</td>
     <td><?php echo isfun("curl_init");?></td>
   </tr> 
    <tr>
-    <td>Поддержка SMTP：</td>
+    <td>SMTP支持：</td>
     <td><?php echo get_cfg_var("SMTP")?'<font color="green"><i class="fa fa-check"></i></font>' : '<font color="red"><i class="fa fa-times"></i></font>';?></td>
-    <td>SMTP адрес：</td>
+    <td>SMTP地址：</td>
     <td><?php echo get_cfg_var("SMTP")?get_cfg_var("SMTP"):'<font color="red"><i class="fa fa-times"></i></font>';?></td>
   </tr> 
 
 	<tr>
-		<td>Поддержка функций по умолчанию （enable_functions）：</td>
-		<td colspan="3"><a href='<?php echo $phpSelf;?>?act=Function' target='_blank' class='static'>Посмотреть детали <i class="fa fa-external-link"></i></a></td>		
+		<td>默认支持函数（enable_functions）：</td>
+		<td colspan="3"><a href='<?php echo $phpSelf;?>?act=Function' target='_blank' class='static'>查看详细 <i class="fa fa-external-link"></i></a></td>		
 	</tr>
 	<tr>
-		<td>Отключенные функции （disable_functions）：</td>
+		<td>被禁用的函数（disable_functions）：</td>
 		<td colspan="3" class="word">
 <?php 
 $disFuns=get_cfg_var("disable_functions");
@@ -1707,19 +1706,19 @@ else
 
 <a name="w_module" id="w_module" style="position:relative;top:-60px;"></a>
 
-<!--Информация о компонентах-->
+<!--组件信息-->
 
 <table>
 
-  <tr><th colspan="4" ><i class="fa fa-cogs"></i> Поддержка компонентов</th></tr>
+  <tr><th colspan="4" ><i class="fa fa-cogs"></i> 组件支持</th></tr>
 
   <tr>
 
-    <td width="32%">Поддержка FTP：</td>
+    <td width="32%">FTP支持：</td>
 
     <td width="18%"><?php echo isfun("ftp_login");?></td>
 
-    <td width="32%">Поддержка XML-решений：</td>
+    <td width="32%">XML解析支持：</td>
 
     <td width="18%"><?php echo isfun("xml_set_object");?></td>
 
@@ -1727,11 +1726,11 @@ else
 
   <tr>
 
-    <td>Поддержка Session：</td>
+    <td>Session支持：</td>
 
     <td><?php echo isfun("session_start");?></td>
 
-    <td>Поддержка Socket：</td>
+    <td>Socket支持：</td>
 
     <td><?php echo isfun("socket_accept");?></td>
 
@@ -1739,12 +1738,12 @@ else
 
   <tr>
 
-    <td>Поддержка Calendar</td>
+    <td>Calendar支持</td>
 
     <td><?php echo isfun('cal_days_in_month');?>
 	</td>
 
-    <td>Разрешение URL для открытия файла：</td>
+    <td>允许URL打开文件：</td>
 
     <td><?php echo show("allow_url_fopen");?></td>
 
@@ -1752,7 +1751,7 @@ else
 
   <tr>
 
-    <td>Поддержка Библиотеки GD：</td>
+    <td>GD库支持：</td>
 
     <td>
 
@@ -1768,7 +1767,7 @@ else
 
 	?></td>
 
-    <td>Поддержка сжатия файлов (Zlib)：</td>
+    <td>压缩文件支持(Zlib)：</td>
 
     <td><?php echo isfun("gzclose");?></td>
 
@@ -1776,11 +1775,11 @@ else
 
   <tr>
 
-    <td>Система электронной почты - IMAP функции：</td>
+    <td>IMAP电子邮件系统函数库：</td>
 
     <td><?php echo isfun("imap_close");?></td>
 
-    <td>Функции календарных операций：</td>
+    <td>历法运算函数库：</td>
 
     <td><?php echo isfun("JDToGregorian");?></td>
 
@@ -1788,11 +1787,11 @@ else
 
   <tr>
 
-    <td>Функции регулярных выражений：</td>
+    <td>正则表达式函数库：</td>
 
     <td><?php echo isfun("preg_match");?></td>
 
-    <td>Поддержка WDDX：</td>
+    <td>WDDX支持：</td>
 
     <td><?php echo isfun("wddx_add_vars");?></td>
 
@@ -1800,7 +1799,7 @@ else
 
   <tr>
 
-    <td>Преобразование кода Iconv：</td>
+    <td>Iconv编码转换：</td>
 
     <td><?php echo isfun("iconv");?></td>
 
@@ -1812,11 +1811,11 @@ else
 
   <tr>
 
-    <td>Высокоточные математические операции：</td>
+    <td>高精度数学运算：</td>
 
     <td><?php echo isfun("bcadd");?></td>
 
-    <td>Справочное соглашение LDAP：</td>
+    <td>LDAP目录协议：</td>
 
     <td><?php echo isfun("ldap_close");?></td>
 
@@ -1824,11 +1823,11 @@ else
 
   <tr>
 
-    <td>Обработка шифрования MCrypt：</td>
+    <td>MCrypt加密处理：</td>
 
     <td><?php echo isfun("mcrypt_cbc");?></td>
 
-    <td>Жесткий расчет：</td>
+    <td>哈稀计算：</td>
 
     <td><?php echo isfun("mhash_count");?></td>
 
@@ -1837,11 +1836,11 @@ else
 </table>
 
 <a name="w_module_other" id="w_module_other" style="position:relative;top:-60px;"></a>
-<!--Информация о сторонних компонентах-->
+<!--第三方组件信息-->
 <table>
-  <tr><th colspan="4" ><i class="fa fa-cubes"></i> Сторонние компоненты</th></tr>
+  <tr><th colspan="4" ><i class="fa fa-cubes"></i> 第三方组件</th></tr>
   <tr>
-    <td width="32%">Версия Zend</td>
+    <td width="32%">Zend版本</td>
     <td width="18%"><?php $zend_version = zend_version();if(empty($zend_version)){echo '<font color=red><i class="fa fa-times"></i></font>';}else{echo $zend_version;}?></td>
     <td width="32%">
 <?php
@@ -1849,7 +1848,7 @@ $PHP_VERSION = PHP_VERSION;
 $PHP_VERSION = substr($PHP_VERSION,2,1);
 if($PHP_VERSION > 2)
 {
-	echo "ZendGuardLoader[Включить]";
+	echo "ZendGuardLoader[启用]";
 }
 else
 {
@@ -1875,15 +1874,15 @@ else
 
 <a name="w_db" id="w_db" style="position:relative;top:-60px;"></a>
 
-<!--Поддержка БД-->
+<!--数据库支持-->
 
 <table>
 
-  <tr><th colspan="4"><i class="fa fa-database"></i> Поддержка БД</th></tr>
+  <tr><th colspan="4"><i class="fa fa-database"></i> 数据库支持</th></tr>
 
   <tr>
 
-    <td width="32%">База данных MySQL：</td>
+    <td width="32%">MySQL 数据库：</td>
 
     <td width="18%"><?php echo function_exists("mysqli_close")||function_exists("mysql_close")?'<font color=green><i class="fa fa-check"></i></font>':'<font color=red><i class="fa fa-times"></i></font>';?>
 
@@ -1892,9 +1891,9 @@ else
 
         $s = @mysql_get_server_info();
 
-        $s = $s ? '&nbsp; mysql_server версия：'.$s : '';
+        $s = $s ? '&nbsp; mysql_server 版本：'.$s : '';
 
-	    $c = '&nbsp; mysql_client версия：'.@mysql_get_client_info();
+	    $c = '&nbsp; mysql_client 版本：'.@mysql_get_client_info();
 
         echo $s;
 
@@ -1908,7 +1907,7 @@ else
 
 	</td>
 
-    <td width="32%">База данных ODBC:</td>
+    <td width="32%">ODBC 数据库：</td>
 
     <td width="18%"><?php echo isfun("odbc_close");?></td>
 
@@ -1916,11 +1915,11 @@ else
 
   <tr>
 
-    <td>База данных Oracle:</td>
+    <td>Oracle 数据库：</td>
 
     <td><?php echo isfun("ora_close");?></td>
 
-    <td>База данных SQL Server:</td>
+    <td>SQL Server 数据库：</td>
 
     <td><?php echo isfun("mssql_close");?></td>
 
@@ -1928,11 +1927,11 @@ else
 
   <tr>
 
-    <td>База данных dBASE:</td>
+    <td>dBASE 数据库：</td>
 
     <td><?php echo isfun("dbase_close");?></td>
 
-    <td>База данных mSQL:</td>
+    <td>mSQL 数据库：</td>
 
     <td><?php echo isfun("msql_close");?></td>
 
@@ -1940,11 +1939,11 @@ else
 
   <tr>
 
-    <td>База данных SQLite:</td>
+    <td>SQLite 数据库：</td>
 
-    <td><?php if(extension_loaded('sqlite3')) {$sqliteVer = SQLite3::version();echo '<font color=green><i class="fa fa-check"></i></font>　';echo "SQLite3　Ver ";echo $sqliteVer[versionString];}else {echo isfun("sqlite_close");if(isfun("sqlite_close") == '<font color="green"><i class="fa fa-check"></i></font>') {echo "&nbsp; версия： ".@sqlite_libversion();}}?></td>
+    <td><?php if(extension_loaded('sqlite3')) {$sqliteVer = SQLite3::version();echo '<font color=green><i class="fa fa-check"></i></font>　';echo "SQLite3　Ver ";echo $sqliteVer[versionString];}else {echo isfun("sqlite_close");if(isfun("sqlite_close") == '<font color="green"><i class="fa fa-check"></i></font>') {echo "&nbsp; 版本： ".@sqlite_libversion();}}?></td>
 
-    <td>База данных Hyperwave:</td>
+    <td>Hyperwave 数据库：</td>
 
     <td><?php echo isfun("hw_close");?></td>
 
@@ -1952,25 +1951,25 @@ else
 
   <tr>
 
-    <td>База данных Postgre SQL:</td>
+    <td>Postgre SQL 数据库：</td>
 
     <td><?php echo isfun("pg_close"); ?></td>
 
-    <td>База данных Informix:</td>
+    <td>Informix 数据库：</td>
 
     <td><?php echo isfun("ifx_close");?></td>
 
   </tr>
   <tr>
-    <td>База данных DBA:</td>
+    <td>DBA 数据库：</td>
     <td><?php echo isfun("dba_close");?></td>
-    <td>База данных DBM:</td>
+    <td>DBM 数据库：</td>
     <td><?php echo isfun("dbmclose");?></td>
   </tr>    
   <tr>
-    <td>База данных FilePro:</td>
+    <td>FilePro 数据库：</td>
     <td><?php echo isfun("filepro_fieldcount");?></td>
-    <td>База данных SyBase:</td>
+    <td>SyBase 数据库：</td>
     <td><?php echo isfun("sybase_close");?></td>
   </tr> 
 
@@ -1980,42 +1979,42 @@ else
 
 <form action="<?php echo $_SERVER[PHP_SELF]."#w_performance";?>" method="post">
 
-<!--Тест производительности сервера-->
+<!--服务器性能检测-->
 
 <table>
 
-  <tr><th colspan="5"><i class="fa fa-tachometer"></i> Тест производительности сервера</th></tr>
+  <tr><th colspan="5"><i class="fa fa-tachometer"></i> 服务器性能检测</th></tr>
 
   <tr align="center">
 
-    <td width="19%">Ссылочный объект</td>
+    <td width="19%">参照对象</td>
 
-    <td width="17%">Обнаружение возможностей работы с целыми числами<br />(1+1 операция - 300 млн.)</td>
+    <td width="17%">整数运算能力检测<br />(1+1运算300万次)</td>
 
-    <td width="17%">Обнаружение возможностей работы с плавающей точкой<br />(Окружность в квадрате - 300 млн.)</td>
+    <td width="17%">浮点运算能力检测<br />(圆周率开平方300万次)</td>
 
-    <td width="17%">Обнаружение возможностей ввода-вывода данных<br />(Считывание 10 файлов - 1 млн.)</td>
+    <td width="17%">数据I/O能力检测<br />(读取10K文件1万次)</td>
 
-    <td width="30%">Информация о CPU</td>
+    <td width="30%">CPU信息</td>
 
   </tr>
   <tr align="center">
-    <td align="left">USA LinodeVPS</td>
-    <td>0.357второй</td>
-    <td>0.802второй</td>
-    <td>0.023второй</td>
+    <td align="left">美国 LinodeVPS</td>
+    <td>0.357秒</td>
+    <td>0.802秒</td>
+    <td>0.023秒</td>
     <td align="left">4 x Xeon L5520 @ 2.27GHz</td>
   </tr> 
 
   <tr align="center">
 
-    <td align="left">USA PhotonVPS.com</td>
+    <td align="left">美国 PhotonVPS.com</td>
 
-    <td>0.431второй</td>
+    <td>0.431秒</td>
 
-    <td>1.024второй</td>
+    <td>1.024秒</td>
 
-    <td>0.034второй</td>
+    <td>0.034秒</td>
 
     <td align="left">8 x Xeon E5520 @ 2.27GHz</td>
 
@@ -2023,13 +2022,13 @@ else
 
   <tr align="center">
 
-    <td align="left">Германия SpaceRich.com</td>
+    <td align="left">德国 SpaceRich.com</td>
 
-    <td>0.421второй</td>
+    <td>0.421秒</td>
 
-    <td>1.003второй</td>
+    <td>1.003秒</td>
 
-    <td>0.038второй</td>
+    <td>0.038秒</td>
 
     <td align="left">4 x Core i7 920 @ 2.67GHz</td>
 
@@ -2037,13 +2036,13 @@ else
 
   <tr align="center">
 
-    <td align="left">USA RiZie.com</td>
+    <td align="left">美国 RiZie.com</td>
 
-    <td>0.521второй</td>
+    <td>0.521秒</td>
 
-    <td>1.559второй</td>
+    <td>1.559秒</td>
 
-    <td>0.054второй</td>
+    <td>0.054秒</td>
 
     <td align="left">2 x Pentium4 3.00GHz</td>
 
@@ -2051,13 +2050,13 @@ else
 
   <tr align="center">
 
-    <td align="left">Египет CitynetHost.com</a></td>
+    <td align="left">埃及 CitynetHost.com</a></td>
 
-    <td>0.343второй</td>
+    <td>0.343秒</td>
 
-    <td>0.761второй</td>
+    <td>0.761秒</td>
 
-    <td>0.023второй</td>
+    <td>0.023秒</td>
 
     <td align="left">2 x Core2Duo E4600 @ 2.40GHz</td>
 
@@ -2065,13 +2064,13 @@ else
 
   <tr align="center">
 
-    <td align="left">USA IXwebhosting.com</td>
+    <td align="left">美国 IXwebhosting.com</td>
 
-    <td>0.535второй</td>
+    <td>0.535秒</td>
 
-    <td>1.607второй</td>
+    <td>1.607秒</td>
 
-    <td>0.058второй</td>
+    <td>0.058秒</td>
 
     <td align="left">4 x Xeon E5530 @ 2.40GHz</td>
 
@@ -2079,13 +2078,13 @@ else
 
   <tr align="center">
 
-    <td>Этот сервер</td>
+    <td>本台服务器</td>
 
-    <td><?php echo $valInt;?><br /><input class="btn" name="act" type="submit" value="Целочисленный тест" /></td>
+    <td><?php echo $valInt;?><br /><input class="btn" name="act" type="submit" value="整型测试" /></td>
 
-    <td><?php echo $valFloat;?><br /><input class="btn" name="act" type="submit" value="Тест с плавающей точкой" /></td>
+    <td><?php echo $valFloat;?><br /><input class="btn" name="act" type="submit" value="浮点测试" /></td>
 
-    <td><?php echo $valIo;?><br /><input class="btn" name="act" type="submit" value="Тест IO" /></td>
+    <td><?php echo $valIo;?><br /><input class="btn" name="act" type="submit" value="IO测试" /></td>
 
     <td></td>
 
@@ -2100,18 +2099,18 @@ else
 <input type="hidden" name="pIo" value="<?php echo $valIo;?>" />
 
 <a name="w_networkspeed" style="position:relative;top:-60px;"></a>
-<!--Тест скорости сети-->
+<!--网络速度测试-->
 <table>
-	<tr><th colspan="3"><i class="fa fa-cloud-upload"></i> Тест скорости сети</th></tr>
+	<tr><th colspan="3"><i class="fa fa-cloud-upload"></i> 网络速度测试</th></tr>
   <tr>
     <td width="19%" align="center"><input name="act" type="submit" class="btn" value="开始测试" />
         <br />
-	Передача клиенту 2048KB	</td>
+	向客户端传送2048KB数据	</td>
     <td width="81%" align="center" >
 
   <table align="center" width="550" border="0" cellspacing="0" cellpadding="0" style="box-shadow:0 0 0;">
     <tr >
-    <td height="15" width="50">ширина полосы</td>
+    <td height="15" width="50">带宽</td>
 	<td height="15" width="50">1M</td>
     <td height="15" width="50">2M</td>
     <td height="15" width="50">3M</td>
@@ -2149,7 +2148,7 @@ else
    </td>
   </tr>
   </table>
-  <?php echo (isset($_GET['speed']))?" скачать 2048KB  <font color='#177BBE'>".$_GET['speed']."</font> второй，Скорость скачивания："."<font color='#177BBE'>".$speed."</font>"." kb/s，Необходимо тестировать в среднем более 10 млн. раз. Напрямую Скорость скачивания":"<font color='#177BBE'>&nbsp; Не обнаружено&nbsp;</font>" ?>
+  <?php echo (isset($_GET['speed']))?"下载2048KB数据用时 <font color='#177BBE'>".$_GET['speed']."</font> 毫秒，下载速度："."<font color='#177BBE'>".$speed."</font>"." kb/s，需测试多次取平均值，超过10M直接看下载速度":"<font color='#177BBE'>&nbsp;未探测&nbsp;</font>" ?>
 
     </td>
   </tr>
@@ -2157,29 +2156,29 @@ else
 
 <a name="w_MySQL" style="position:relative;top:-60px;"></a>
 
-<!--Обнаружение соединения с БВ MySQL-->
+<!--MySQL数据库连接检测-->
 
 <table>
 
-	<tr><th colspan="3"><i class="fa fa-link"></i> Обнаружение соединения с БВ MySQL</th></tr>
+	<tr><th colspan="3"><i class="fa fa-link"></i> MySQL数据库连接检测</th></tr>
 
   <tr>
 
     <td width="85%">
 
-      адрес：<input type="text" name="host" value="localhost" size="10" />
+      地址：<input type="text" name="host" value="localhost" size="10" />
 
-      порт：<input type="text" name="port" value="3306" size="10" />
+      端口：<input type="text" name="port" value="3306" size="10" />
 
-      имя пользователя：<input type="text" name="login" size="10" />
+      用户名：<input type="text" name="login" size="10" />
 
-      пароль：<input type="password" name="password" size="10" />
+      密码：<input type="password" name="password" size="10" />
 
     </td>
 
     <td width="15%">
 
-      <input class="btn" type="submit" name="act" value="Обнаружение MySQL" />
+      <input class="btn" type="submit" name="act" value="MySQL检测" />
 
     </td>
 
@@ -2189,7 +2188,7 @@ else
 
   <?php
 
-  if ($_POST['act'] == 'Обнаружение MySQL') {
+  if ($_POST['act'] == 'MySQL检测') {
 
   	if(function_exists("mysql_close")==1) {
 
@@ -2197,17 +2196,17 @@ else
 
   		if ($link){
 
-  			echo "<script>alert('Подключен к БД MySql нормально')</script>";
+  			echo "<script>alert('连接到MySql数据库正常')</script>";
 
   		} else {
 
-  			echo "<script>alert('Невозможно подключить к БД MySql！')</script>";
+  			echo "<script>alert('无法连接到MySql数据库！')</script>";
 
   		}
 
   	} else {
 
-  		echo "<script>alert('Сервер не поддерживает БД MySQL！')</script>";
+  		echo "<script>alert('服务器不支持MySQL数据库！')</script>";
 
   	}
 
@@ -2217,17 +2216,17 @@ else
 	
 <a name="w_function" style="position:relative;top:-60px;"></a>
 
-<!--Обнаружение функций-->
+<!--函数检测-->
 
 <table>
 
-	<tr><th colspan="3"><i class="fa fa-code"></i> Обнаружение функций</th></tr>
+	<tr><th colspan="3"><i class="fa fa-code"></i> 函数检测</th></tr>
 
   <tr>
 
     <td width="85%">
 
-      Введите функцию, которую хотите проверить：
+      请输入您要检测的函数：
 
       <input type="text" name="funName" size="50" />
 
@@ -2235,7 +2234,7 @@ else
 
     <td width="15%">
 
-      <input class="btn" type="submit" name="act" align="right" value="Обнаружение функций" />
+      <input class="btn" type="submit" name="act" align="right" value="函数检测" />
 
     </td>
 
@@ -2243,7 +2242,7 @@ else
 
   <?php
 
-  if ($_POST['act'] == 'Обнаружение функций') {
+  if ($_POST['act'] == '函数检测') {
 
   	echo "<script>alert('$funRe')</script>";
 
@@ -2255,17 +2254,17 @@ else
 
 <a name="w_mail" style="position:relative;top:-60px;"></a>
 
-<!--Обнаружение отправки почты-->
+<!--邮件发送检测-->
 
 <table>
 
-  <tr><th colspan="3"><i class="fa fa-envelope-o "></i> Обнаружение отправки почты</th></tr>
+  <tr><th colspan="3"><i class="fa fa-envelope-o "></i> 邮件发送检测</th></tr>
 
   <tr>
 
     <td width="85%">
 
-      Введите адрес：
+      请输入您要检测的邮件地址：
 
       <input type="text" name="mailAdd" size="50" />
 
@@ -2273,7 +2272,7 @@ else
 
     <td width="15%">
 
-    <input class="btn" type="submit" name="act" value="Обнаружение почты" />
+    <input class="btn" type="submit" name="act" value="邮件检测" />
 
     </td>
 
@@ -2281,7 +2280,7 @@ else
 
   <?php
 
-  if ($_POST['act'] == 'Обнаружение почты') {
+  if ($_POST['act'] == '邮件检测') {
 
   	echo "<script>alert('$mailRe')</script>";
 
